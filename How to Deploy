@@ -1,0 +1,30 @@
+Hi, this is your README for deploying and running my CIS 580 project tool. the tool uses hadoop to analyze historical bug reports from software repositories like the eclipse dataset in eclipse_platform.csv. it processes the full large data to identify patterns and guess buggy locations, which aligns with search based software engineering. the dataset eclipse_platform.csv is from bugrepo on github, and it contains 85,157 bug reports with columns like issue id, priority, component, title, description the tool parses descriptions to extract file names like widget.java mentioned 315 times. you have to transfer it to the vm with filezilla, put it in hdfs /input or eclipse input folder, run the job, and view output in /output/part-r-00000 ranked csv like widget.java,315. compiler output in console shows processing like desc..., found file..., done true processed 85157 lines.
+What is Hadoop, Who Uses It, and Why Use a VM?
+hadoop is a free open source tool for handling massive data it's like a super smart assistant that splits huge files across many computers server farms with backups, using mapreduce to find patterns or count things fast. companies like google for search, amazon for shopping data, netflix for recommendations from viewing history, and instagram for user photos use it because it's reliable for big messy data text logs numbers and scales for billions of users.
+we mimic it with a vm virtual machine because hadoop is designed for large server farms with lots of data, but for school testing a single vm cloudera simulates a mini farm on your laptop. it's like practicing on a small model before a real one easy, no hardware cost.
+Step 1: Set Up VirtualBox and Cloudera VM to Get Hadoop Running
+
+install virtualbox: download from https://www.virtualbox.org/wiki/Downloads any version. install it click next next. if windows, add visual c++ from https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170.
+download cloudera quickstart vm: from https://downloads.cloudera.com/demo_vm/virtualbox/cloudera-quickstart-vm-5.13.0-0-virtualbox.zip zip file.
+import vm: open virtualbox, file > import appliance > pick the ovf from zip > next > finish.
+fix common issues:
+enable virtualization bios setting search for your laptop model.
+memory: settings > system > base memory = 4096 mb or half your ram if low.
+panic error: settings > system > processor > set to 2+ cpus.
+mac m1 m2: use lab windows machine.
+
+start vm: click cloudera machine > start. login cloudera / cloudera.
+file transfer: download filezilla on real computer. in vm terminal, type ifconfig eth1 ip like 192.168... . connect filezilla host = vm ip, user = cloudera, pass = cloudera, port 22. drag files code, eclipse_platform.csv to vm home.
+
+Step 2: Deploy and Run the Tool in Eclipse
+
+open eclipse in vm: click eclipse icon on desktop.
+create project: file > new > java project > name mybugproject > finish.
+add code: right-click src > new > class > name bugtool > paste the code from my previous message > finish.
+add hadoop jars: right-click mybugproject > build path > add external jars > /usr/lib/hadoop > add hadoop-common.jar, hadoop-mapreduce-client-core.jar, hadoop-client.jar > ok.
+add input data: right-click mybugproject > new > folder > input > drag eclipse_platform.csv into it.
+run: right-click bugtool.java > run as > java application.
+console shows processing desc..., found file..., done true processed 85157 lines.
+if done true success! output in project output folder part-r-00000 csv ranks.
+
+compiler output: console shows logs warnings ignore, look for processed lines. screenshot for demo.
